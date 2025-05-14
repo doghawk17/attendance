@@ -14,57 +14,117 @@ if ($_SESSION['is_admin'] == 1) {
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <style>
       body {
-        font-family: "Arial";
+        font-family: 'Inter', sans-serif;
+        background-color: #f8f9fa;
       }
+      .leave-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      .leave-header {
+        background: linear-gradient(135deg, #00897B 0%, #004D40 100%);
+        color: white;
+        padding: 1.5rem;
+      }
+      .leave-body {
+        padding: 2rem;
+      }
+      .form-control {
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        padding: 0.8rem;
+      }
+      .form-control:focus {
+        border-color: #00897B;
+        box-shadow: 0 0 0 0.2rem rgba(0, 137, 123, 0.25);
+      }
+      .btn-submit {
+        background: linear-gradient(135deg, #00897B 0%, #004D40 100%);
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 30px;
+        font-weight: 500;
+        transition: transform 0.2s;
+      }
+      .btn-submit:hover {
+        transform: translateY(-2px);
+        color: white;
+      }
+      .alert {
+        border-radius: 10px;
+        border: none;
+      }
+      .alert-success {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+      .alert-danger {
+        background-color: #ffebee;
+        color: #c62828;
+      }
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     </style>
-    <title>Hello, world!</title>
+    <title>Request Leave | Attendance System</title>
   </head>
-  <body onload="startTime()">
+  <body>
     <?php include 'includes/navbar.php'; ?>
-    <div class="container-fluid">
+    <div class="container-fluid px-4">
       <div class="row justify-content-center">
-        <div class="col-md-10">
-          <div class="card shadow mt-4">
-            <div class="card-header"><h4>File your leave here, <?php echo $_SESSION['username']; ?>!</h4></div>
-            <div class="card-body p-5">
+        <div class="col-md-8">
+          <div class="leave-card mt-4">
+            <div class="leave-header">
+              <h3><i class="fas fa-calendar-alt mr-2"></i>Request Leave</h3>
+              <p class="lead mb-0">Submit your leave application</p>
+            </div>
+            
+            <div class="leave-body">
               <?php  
                 if (isset($_SESSION['message']) && isset($_SESSION['status'])) {
-
                   if ($_SESSION['status'] == "200") {
-                    echo "<h1 style='color: green;'>{$_SESSION['message']}</h1>";
+                    echo "<div class='alert alert-success'><i class='fas fa-check-circle mr-2'></i>{$_SESSION['message']}</div>";
+                  } else {
+                    echo "<div class='alert alert-danger'><i class='fas fa-exclamation-circle mr-2'></i>{$_SESSION['message']}</div>";
                   }
-
-                  else {
-                    echo "<h1 style='color: red;'>{$_SESSION['message']}</h1>"; 
-                  }
-
                 }
                 unset($_SESSION['message']);
                 unset($_SESSION['status']);
               ?>
+              
               <form action="core/handleForms.php" method="POST">
                 <div class="form-group">
-                  <label for="exampleFormControlTextarea1">Description</label>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"></textarea>                
+                  <label for="description"><i class="fas fa-comment-alt mr-2"></i>Leave Description</label>
+                  <textarea class="form-control" id="description" name="description" rows="4" placeholder="Please provide details about your leave request"></textarea>
                 </div>
-                <div class="form-group">
-                  <label for="exampleFormControlTextarea1">Date Start</label>
-                  <input type="date" class="form-control" name="date_start"> 
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="date_start"><i class="fas fa-calendar-plus mr-2"></i>Start Date</label>
+                      <input type="date" class="form-control" id="date_start" name="date_start">
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="date_end"><i class="fas fa-calendar-minus mr-2"></i>End Date</label>
+                      <input type="date" class="form-control" id="date_end" name="date_end">
+                    </div>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="exampleFormControlTextarea1">Date End</label>
-                  <input type="date" class="form-control" name="date_end"> 
-                  <input type="submit" class="mt-4 btn btn-primary float-right" name="insertNewLeaveBtn">
-                </div>
+                
+                <button type="submit" class="btn btn-submit float-right" name="insertNewLeaveBtn">
+                  <i class="fas fa-paper-plane mr-2"></i>Submit Request
+                </button>
               </form>
             </div>
           </div>
